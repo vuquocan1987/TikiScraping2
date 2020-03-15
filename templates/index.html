@@ -1,0 +1,18 @@
+{% extends 'base.html'%}
+{% block table %}
+<div class="container">
+  {% for item_list in data %}
+  <div class="card-deck">
+    {% for item in item_list %}
+    <div class="card">
+      <img class="card-img-top" src="{{item["img_url"]}}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{item["title"]}}</h5>
+        <p class="card-text"><small class="text-muted">{{item["price"]}}</small></p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

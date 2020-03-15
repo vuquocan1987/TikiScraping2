@@ -29,13 +29,17 @@
                           <a class="dropdown-toggle" id="dropdown1-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{cat["name"]}}</a>
                           <ul class="dropdown-menu" aria-labelledby="dropdown1-1">
                               {% for cat in cat.child_cats recursive %}
+                              {% if cat.child_cats %}
                               <li class="dropdown-item dropdown">
                                   <a class="dropdown-toggle" id="dropdown1-1-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{cat["name"]}}</a>
                                   <ul class="dropdown-menu" aria-labelledby="dropdown1-1-1">
-                                      <li class="dropdown-item" href="#"><a>Action 1.1.1</a></li>
+                                      
                                         {{loop(cat.child_cats)}}
                                   </ul>
                               </li>
+                              {% else %}
+                              <li class="dropdown-item" href="/page/{{cat["cat_id"]}}"><a href="/page/{{cat["cat_id"]}}">{{cat["name"]}}</a></li>
+                              {% endif %}
                               {% endfor%}
                           </ul>
                       </li>
@@ -50,6 +54,21 @@
           </form>
       </div>
   </div>
+  <div class="container">
+        {% for item_list in data %}
+        <div class="card-deck">
+          {% for item in item_list %}
+          <div class="card">
+            <img class="card-img-top" src="{{item["img_url"]}}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">{{item["title"]}}</h5>
+              <p class="card-text"><small class="text-muted">{{item["price"]}}</small></p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
     {% block table %}
     {% endblock %}
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

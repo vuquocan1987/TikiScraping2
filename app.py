@@ -115,12 +115,12 @@ def init_crawl(debug_run = True):
 
 def parse_html(url):
     soup = get_soup(url)
-    soup_item_list = soup.find_all('div', class_ = "product-item")
+    soup_item_list = soup.find_all('div', class_ = "content")
     item_list = []
     for soup_item in soup_item_list:
         dict_item = {"title":"","link":"","img_url":"","description":"","price":""}
         try:
-            dict_item["title"] = soup_item["data-title"]
+            dict_item["title"] = soup_item.find("p", class_ = "title").text
             dict_item["img_url"] = soup_item.img["src"]
             dict_item["price"] = soup_item.find("span", class_="price-regular").text
             item_list.append(dict_item)
@@ -137,11 +137,20 @@ def convert_2d(items):
 def select_cat(index):
     conn = sqlite3.connect('tiki.db')
     cur = conn.cursor()
-    query = "SELECT * FROM categories where cat_id = ?;"
-    cat = cur.execute(query,index).fetchall()
+    query = "SELECT * FROM categories where id = ?;"
+    cat = cur.execute(query,(index,)).fetchall()
 
     return cat
 
+@app.route('/page/<int:id>')
+def content(id):
+    gen_cats_tree()
+    main_cats = gen_cats_tree()
+    cat = select_cat(id)
+    url = cat[0][2]
+    data = parse_html(url)
+    data = convert_2d(data)
+    return render_template('base.html',main_cats = main_cats, data=data)
 
 @app.route('/')
 def index():
@@ -150,14 +159,7 @@ def index():
     main_cats = gen_cats_tree()
     return render_template('base.html',main_cats = main_cats, data=[])
 
-@app.route('/page/<int:id>')
-def content(id):
-    gen_cats_tree()
-    main_cats = gen_cats_tree()
-    cat = select_cat(id)
-    data = parse_html(cat.url)
-    data = convert_2d(data)
-    return render_template('base.html',main_cats = main_cats, data=data)
+
 if __name__ == '__main__':
   app.run(host='127.0.0.1', port=8000, debug=True)
  

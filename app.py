@@ -75,7 +75,7 @@ def get_sub_categories(category, save_db = False,debug_run=False):
     except Exception as err:
         print('ERROR BY GET SUB CATEGORIES:', err)
     if debug_run:
-        return result[0:2]
+        return result
     else:
         return result
 
@@ -154,7 +154,7 @@ def content(id):
 
 @app.route('/')
 def index():
-#    init_crawl()
+#  init_crawl()
     gen_cats_tree()
     main_cats = gen_cats_tree()
     return render_template('base.html',main_cats = main_cats, data=[])

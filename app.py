@@ -53,7 +53,7 @@ def get_main_categories(save_db = False,debug_run=False):
             cat.save_into_db()
         result.append(cat)
     if debug_run:
-        return result[0:3]
+        return result[0:10]
     return result
 def get_sub_categories(category, save_db = False,debug_run=False):
     name = category.name
@@ -154,7 +154,7 @@ def content(id):
 
 @app.route('/')
 def index():
-#  init_crawl()
+#    init_crawl()
     gen_cats_tree()
     main_cats = gen_cats_tree()
     return render_template('base.html',main_cats = main_cats, data=[])
